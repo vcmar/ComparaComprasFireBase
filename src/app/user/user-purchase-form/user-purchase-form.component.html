@@ -1,0 +1,467 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm text-right">
+      <a class="nav-link" routerLink="/user/dashboard"
+        ><fa-icon [icon]="faBackward"></fa-icon> Voltar
+      </a>
+    </div>
+    <div class="col-sm"></div>
+  </div>
+  <div class="row">
+    <!-- LEFT SIDE -->
+    <div class="col-sm">
+      <form [formGroup]="form">
+        <ngb-accordion [closeOthers]="true" activeIds="dadosBasicos">
+          <ngb-panel id="dadosBasicos" title="Dados da Compra">
+            <ng-template ngbPanelContent>
+              <div class="row">
+                <div class="col-sm">
+                  <div class="form-group">
+                    <label for="purchasePlace">Local</label>
+                    <input
+                      formControlName="purchasePlace"
+                      [ngbTypeahead]="searchPlaces"
+                      [editable]="false"
+                      container="body"
+                      type="text"
+                      name="purchasePlace"
+                      id="purchasePlace"
+                      aria-describedby="purchasePlaceHelp"
+                      class="form-control form-control-sm"
+                    />
+                    <small id="purchasePlaceHelp" class="form-text text-muted"
+                      >Onde foi feita a compra</small
+                    >
+                    <small
+                      *ngIf="purchasePlace.touched && purchasePlace.invalid"
+                      id="purchasePlaceHelpErrorRequired"
+                      class="alert alert-danger form-text text-muted"
+                      >Local da compra deve ser informado</small
+                    >
+                  </div>
+                </div>
+                <div class="col-sm">
+                  <div class="form-group">
+                    <label for="purchaseDate">Data</label>
+                    <div class="input-group">
+                      <input
+                        ngbDatepicker
+                        #d="ngbDatepicker"
+                        formControlName="purchaseDate"
+                        type="text"
+                        name="purchaseDate"
+                        id="purchaseDate"
+                        aria-describedby="purchaseDateHelp"
+                        class="form-control form-control-sm"
+                        container="body"
+                        readonly
+                      />
+                      <div class="input-group-append">
+                        <button
+                          class="btn btn-sm btn-outline-secondary calendar"
+                          (click)="d.toggle()"
+                          type="button"
+                        >
+                          <fa-icon [icon]="faCalendarAlt"></fa-icon>
+                        </button>
+                      </div>
+                    </div>
+
+                    <small id="purchaseDateHelp" class="form-text text-muted"
+                      >Quando foi feita a compra</small
+                    >
+                    <small
+                      *ngIf="purchaseDate.touched && purchaseDate.invalid"
+                      id="purchaseDateHelpErrorRequired"
+                      class="alert alert-danger form-text text-muted"
+                      >A Data deve ser informada</small
+                    >
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+          </ngb-panel>
+
+          <ngb-panel id="dadosProdutos" title="Produtos">
+            <ng-template ngbPanelContent>
+              <div class="row">
+                <div class="col-sm">
+                  <div class="form-group">
+                    <div class="row">
+                      <div class="col-sm">
+                        <label for="purchaseProduct">Produto</label>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-9 col-sm">
+                        <input
+                          formControlName="purchaseProduct"
+                          [ngbTypeahead]="searchProducts"
+                          [editable]="false"
+                          container="body"
+                          type="text"
+                          name="purchaseProduct"
+                          id="purchaseProduct"
+                          aria-describedby="purchaseProductHelp"
+                          class="form-control form-control-sm"
+                        />
+                        <small
+                          id="purchaseProductHelp"
+                          class="form-text text-muted"
+                          >Encontre o produto</small
+                        >
+                        <small
+                          *ngIf="
+                            purchaseProduct.touched && purchaseProduct.invalid
+                          "
+                          id="purchaseProductHelpErrorRequired"
+                          class="alert alert-danger form-text text-muted"
+                          >Um produto deve ser selecionado</small
+                        >
+                      </div>
+                      <div class="col-3">
+                        <button
+                          class="btn btn-sm btn-info"
+                          ngbTooltip="Caso não encontre seu produto..."
+                          container="body"
+                          (click)="ShowNewProductForm()"
+                        >
+                          <fa-icon [icon]="faFolderPlus"></fa-icon>Novo
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm">
+                  <div class="form-group">
+                    <label for="purchasePackage">Embalagem</label>
+                    <input
+                      formControlName="purchasePackage"
+                      [ngbTypeahead]="searchPackages"
+                      [editable]="false"
+                      container="body"
+                      type="text"
+                      name="purchasePackage"
+                      id="purchasePackage"
+                      aria-describedby="purchasePackageHelp"
+                      class="form-control form-control-sm"
+                    />
+                    <small id="purchasePackageHelp" class="form-text text-muted"
+                      >Como o produto é apresentado?</small
+                    >
+                    <small
+                      *ngIf="purchasePackage.touched && purchasePackage.invalid"
+                      id="purchasePackageHelpErrorRequired"
+                      class="alert alert-danger form-text text-muted"
+                      >Informe o tipo de embalagem</small
+                    >
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm">
+                  <div class="form-group">
+                    <label for="purchaseQtd">Quantidade</label>
+                    <input
+                      formControlName="purchaseQtd"
+                      type="text"
+                      name="purchaseQtd"
+                      id="purchaseQtd"
+                      aria-describedby="purchaseQtdHelp"
+                      class="form-control form-control-sm"
+                      (blur)="calculateTotalPrice()"
+                    />
+                    <small id="purchaseQtdHelp" class="form-text text-muted"
+                      >Quantas unidades foram compradas?</small
+                    >
+                    <small
+                      *ngIf="purchaseQtd.touched && purchaseQtd.invalid"
+                      id="purchaseQtdHelpErrorRequired"
+                      class="alert alert-danger form-text text-muted"
+                      >Quantidade deve ser informada</small
+                    >
+                  </div>
+                </div>
+
+                <div class="col-sm">
+                  <div class="form-group">
+                    <label for="purchaseUnitValue">Valor da unidade</label>
+                    <input
+                      formControlName="purchaseUnitValue"
+                      type="text"
+                      name="purchaseUnitValue"
+                      id="purchaseUnitValue"
+                      aria-describedby="purchaseUnitValueHelp"
+                      class="form-control form-control-sm"
+                      (blur)="calculateTotalPrice()"
+                    />
+                    <small
+                      id="purchaseUnitValueHelp"
+                      class="form-text text-muted"
+                      >Quanto custa uma unidade? Ex. Valor do Quilo</small
+                    >
+                    <small
+                      *ngIf="
+                        purchaseUnitValue.touched && purchaseUnitValue.invalid
+                      "
+                      id="purchaseUnitValueHelpErrorRequired"
+                      class="alert alert-danger form-text text-muted"
+                      >Valor unitário é obrigatório</small
+                    >
+                  </div>
+                </div>
+
+                <div class="col-sm">
+                  <div class="form-group">
+                    <label for="purchaseBillingValue">Valor na Nota</label>
+                    <input
+                      formControlName="purchaseBillingValue"
+                      type="text"
+                      name="purchaseBillingValue"
+                      id="purchaseBillingValue"
+                      aria-describedby="purchaseBillingValueHelp"
+                      class="form-control form-control-sm"
+                      [value]="purchaseBillingValue.value | number: '1.2-2'"
+                    />
+                    <small
+                      id="purchaseBillingValueHelp"
+                      class="form-text text-muted"
+                      >Qual foi o valor pago na nota?</small
+                    >
+                    <small
+                      *ngIf="
+                        purchaseBillingValue.touched &&
+                        purchaseBillingValue.invalid
+                      "
+                      id="purchaseBillingValueHelpErrorRequired"
+                      class="alert alert-danger form-text text-muted"
+                      >Valor pago é obrigatório</small
+                    >
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-9 col-sm">
+                  <div class="form-group">
+                    <div class="form-check">
+                      <input
+                        formControlName="purchaseHasOffer"
+                        type="checkbox"
+                        class="form-check-input"
+                        id="hasOffer"
+                        name="hasOffer"
+                        (click)="enableOffer()"
+                      />
+                      <label class="form-check-label" for="hasOffer"
+                        >Aplicar oferta?</label
+                      >
+                    </div>
+                  </div>
+                </div>
+                <div class="col-3 col-sm text-right">
+                  <button
+                    class="btn btn-sm btn-success"
+                    (click)="addItemToList()"
+                    [disabled]="isSaving"
+                  >
+                    Adicionar
+                  </button>
+                </div>
+              </div>
+              <ng-template [ngIf]="purchaseHasOffer.value">
+                <div class="row">
+                  <div class="col-sm">
+                    <div class="form-group">
+                      <label for="purchaseOfferType">Tipo da Oferta</label>
+                      <input
+                        formControlName="purchaseOfferType"
+                        type="text"
+                        name="purchaseOfferType"
+                        id="purchaseOfferType"
+                        aria-describedby="purchaseOfferTypeHelp"
+                        class="form-control form-control-sm"
+                      />
+                      <small
+                        id="purchaseOfferTypeHelp"
+                        class="form-text text-muted"
+                        >Ex. Leve 3 e Pague 2 ou 20% de desconto</small
+                      >
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-5 col-sm">
+                    <div class="form-check form-check-inline">
+                      <input
+                        formControlName="purchaseApplyOfferType"
+                        type="radio"
+                        name="purchaseApplyOfferType"
+                        id="purchaseApplyOfferType"
+                        class="form-check-input"
+                        (click)="changeOfferType(1)"
+                        value="1"
+                      /><label for="offerInUnitPrice" class="form-check-label"
+                        >Valor do item com desconto</label
+                      >
+                    </div>
+                  </div>
+                  <div class="col-5 col-sm">
+                    <div class="form-check form-check-inline">
+                      <input
+                        formControlName="purchaseApplyOfferType"
+                        type="radio"
+                        name="purchaseApplyOfferType"
+                        id="purchaseApplyOfferType"
+                        class="form-check-input"
+                        (click)="changeOfferType(2)"
+                        value="2"
+                      /><label for="offerInTotalPrice" class="form-check-label"
+                        >Desconto aplicado no valor final</label
+                      >
+                    </div>
+                  </div>
+
+                  <div class="col-2 col-sm text-right">
+                    <div class="form-check form-check-inline">
+                      <button
+                        type="button"
+                        container="body"
+                        placement="left"
+                        class="btn btn-secondary btn-sm btn-infoCircle"
+                        [ngbPopover]="popOffer"
+                      >
+                        <fa-icon [icon]="faInfoCircle"></fa-icon>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm">
+                    <div class="form-group">
+                      <label for="purchaseOfferUnitValue"
+                        >Valor unitário na oferta</label
+                      >
+                      <input
+                        formControlName="purchaseOfferUnitValue"
+                        type="text"
+                        name="purchaseOfferUnitValue"
+                        id="purchaseOfferUnitValue"
+                        aria-describedby="purchaseOfferUnitValueHelp"
+                        class="form-control form-control-sm"
+                        (blur)="calculateOferPrice()"
+                      />
+                      <small
+                        id="purchaseOfferUnitValueHelp"
+                        class="form-text text-muted"
+                        >Nessa oferta, qual o valor real de cada unidade</small
+                      >
+                      <small
+                        *ngIf="
+                          purchaseOfferUnitValue.touched &&
+                          purchaseOfferUnitValue.invalid
+                        "
+                        id="purchaseOfferUnitValueHelpInvalidFormat"
+                        class="alert alert-danger form-text text-muted"
+                        >Valor inválido</small
+                      >
+                    </div>
+                  </div>
+                  <div class="col-sm">
+                    <div class="form-group">
+                      <label for="purchaseOfferDiscountValue"
+                        >Desconto na nota</label
+                      >
+                      <input
+                        formControlName="purchaseOfferDiscountValue"
+                        type="text"
+                        name="purchaseOfferDiscountValue"
+                        id="purchaseOfferDiscountValue"
+                        aria-describedby="purchaseOfferDiscountValueHelp"
+                        class="form-control form-control-sm"
+                        (blur)="calculateOferPrice()"
+                      />
+                      <small
+                        id="purchaseOfferDiscountValueHelp"
+                        class="form-text text-muted"
+                        >Valor total do desconto para esse produto</small
+                      >
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+            </ng-template>
+          </ngb-panel>
+        </ngb-accordion>
+      </form>
+    </div>
+
+    <div class="col-sm">
+      <app-product-search
+        [shouldDisplayDate]="false"
+        [shouldDisplayPlace]="false"
+        [shouldDisplayQtd]="true"
+        [shouldDisplaySearch]="false"
+        [shouldDisplayTitle]="false"
+        [shouldDisplayDelete]="true"
+        [pageSizeOptions]=[25,10,50,100]
+        [prodList]="prodsFromPurchase"
+        (removeItem)="removeMe($event)"
+      >
+      </app-product-search>
+      <br />
+    </div>
+  </div>
+</div>
+<div *ngIf="isLoading || isSaving || isDeleting" class="spinner"></div>
+<ng-template #popOffer>
+  <p>
+    Para registros onde temos o valor de cada item com desconto, use a primeira
+    opção.
+  </p>
+  <p>
+    Para registros onde o desconto é aplicado no valor final dos itens, use a
+    segunda opção.
+  </p>
+</ng-template>
+
+<ng-template #modalDeleteContent let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-title">Confirmar exclusão de Produto</h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close button"
+      aria-describedby="modal-title"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>
+      <strong
+        >Realmente deseja remover o produto
+        <span class="text-primary">{{ modalBodyMsg }}</span> do registro de
+        compra?</strong
+      >
+    </p>
+    <p><span class="text-danger">Esta operação não pode ser desfeita.</span></p>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-outline-secondary"
+      (click)="modal.dismiss('clicou cancelar')"
+    >
+      Cancelar
+    </button>
+    <button
+      type="button"
+      ngbAutofocus
+      class="btn btn-danger"
+      (click)="modal.close('true')"
+    >
+      Ok
+    </button>
+  </div>
+</ng-template>

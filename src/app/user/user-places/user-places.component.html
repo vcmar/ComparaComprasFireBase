@@ -1,0 +1,83 @@
+  <div class="container">
+    <h1>Mercados</h1>
+    <p class="lead">
+      Listagem com todos os estabelecimentos disponíveis para realizar uma
+      compra, e fazer consultas de preços
+    </p>
+
+    <div class="row">
+      <div class="col-sm col-8"></div>
+      <div class="col-sm col-4 text-right">
+        <a routerLink="/user/places/new" class="btn btn-primary btn-sm"
+          >Novo Mercado</a
+        >
+      </div>
+    </div>
+
+    <table class="table table-sm table-striped">
+      <thead class="thead-light">
+        <tr>
+          <th scope="col">Nome</th>
+          <th scope="col">Referencia</th>
+          <th scope="col">Estacionamento?</th>
+          <th scope="col">Mapa</th>
+          <th scope="col">Opção</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngIf="isLoading">
+          <td colspan="5">
+            Aguarde, carregando lista de mercados do sistema...
+          </td>
+        </tr>
+        <tr *ngFor="let item of placeList">
+          <td>{{ item.placeName }}</td>
+          <td>{{ item.placeReference }}</td>
+          <td>{{ item.placeHasParking | boolean: "sim":"não" | titlecase }}</td>
+          <td>
+            <button
+              class="btn btn-info  btn-sm"
+              (click)="showMap(item)"
+            >
+              Mapa
+            </button>
+          </td>
+          <td class="text-right">
+            <button
+              class="btn btn-warning btn-sm"
+              style="margin-right: 0.5rem;"
+              (click)="editItem(item)"
+            >
+              Editar
+            </button>
+            <button
+              class="btn btn-danger  btn-sm"
+              (click)="deleteItem(item, modalDeleteContent)"
+              [disabled]="isDeleting"
+            >
+              Excluir
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+
+<ng-template #modalDeleteContent let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-title">Confirmar exclusão de Mercado</h4>
+    <button type="button" class="close" aria-label="Close button" aria-describedby="modal-title" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p><strong>Você tem certeza que deseja excluir o mercado <span class="text-primary">{{modalBodyMsg}}</span></strong></p>
+    <p><span class="text-danger">Esta operação não pode ser desfeita.</span></p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss('clicou cancelar')">Cancelar</button>
+    <button type="button" ngbAutofocus class="btn btn-danger" (click)="modal.close('true')">Ok</button>
+  </div>
+</ng-template>

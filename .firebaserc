@@ -1,0 +1,15 @@
+{
+  "targets": {
+    "comparacompras-dev": {
+      "hosting": {
+        "compara-compras-spa": [
+          "comparacompras-dev"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "staging": "comparacompras-dev",
+    "default": "comparacompras-dev"
+  }
+}

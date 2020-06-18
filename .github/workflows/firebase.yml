@@ -1,0 +1,71 @@
+name: Deploy To Firebase
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  push:
+    branches: [ master ]
+
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [12.x]
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - name: Checkout Repo
+      uses: actions/checkout@v2
+    # Cache Node Modules to speed up next runs, based on package-lock.json
+    - name: Cache node modules
+      uses: actions/cache@v1
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+    # Setup node environment
+    - name: Node ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+          node-version: ${{ matrix.node-version }}
+
+    - name: Install Dependencies
+      run: npm init -y && npm install
+
+    - name: Build Project for PROD.
+      run: |
+          npm i
+          npm run build:prod
+    - name: Push Build to Releases
+      uses: ncipollo/release-action@v1
+      with:
+          artifacts: "dist/angular-githubaction/*"
+          token: ${{ secrets.TOKEN }}
+    - name: Archive Production Artifact
+      uses: actions/upload-artifact@master
+      with:
+          name: dist
+          path: dist
+  deploy:
+    name: Deploy
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@master
+      - name: Download Artifact
+        uses: actions/download-artifact@master
+        with:
+          name: dist
+          path: dist
+      - name: Deploy to Firebase
+        uses: w9jds/firebase-action@master
+        with:
+          args: deploy --only hosting
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}

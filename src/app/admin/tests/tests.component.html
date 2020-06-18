@@ -1,0 +1,61 @@
+<p>tests works!</p>
+<button class="btn btn-primary btn-sm" (click)="listarMarcas()">
+  Listar collection Itens
+</button>
+<br />
+Produto no banco de dados: {{ itemFromDB | json }}
+
+<br /><br /><br />
+Marca piraque: {{ itemsSpecificBrand | json }}
+<br />
+<button class="btn btn-primary btn-sm" (click)="createPackageList()">
+  Recriar lista de embalagens
+</button>
+<button class="btn btn-primary btn-sm" (click)="createBrandList()">
+  Recriar lista de marcas
+</button>
+<button class="btn btn-primary btn-sm" (click)="createCategoriesList()">
+  Recriar lista de Categorias
+</button>
+createBrandList
+
+<button class="btn btn-primary btn-sm" (click)="listBrands()">
+  Listar shared Marcas
+</button>
+
+<button class="btn btn-primary btn-sm" (click)="listPackages()">
+  Listar shared Marcas
+</button>
+
+<ul>
+  <li *ngFor="let item of elList" >{{item}}</li>
+</ul>
+
+<ul>
+  <li *ngFor="let item of pdrList" >{{item['name']}} - {{item['id']}} </li>
+</ul>
+
+<button class="btn btn-light" (click)="searchArrayMap()">btn-light: search array map</button>
+<button class="btn btn-dark" (click)="testArrayUnion()">btn-dark: test array union</button>
+<button class="btn btn-link" (click)="listProducts()">btn-link: Listar todos os produtos...</button>
+
+<br><br>
+
+<button type="button" class="btn btn-primary" (click)="acertarPurchaseProducts()">btn-primary: Acertar PurchaseProducs</button>
+<button type="button" class="btn btn-secondary">Secondary</button>
+<button type="button" class="btn btn-success">Success</button>
+<button type="button" class="btn btn-danger">Danger</button>
+<button type="button" class="btn btn-warning">Warning</button>
+<button type="button" class="btn btn-info">Info</button>
+<button type="button" class="btn btn-light">Light</button>
+<button type="button" class="btn btn-dark">Dark</button>
+
+<button type="button" class="btn btn-link">Link</button>
+<br>
+<br>
+<button type="button" class="btn btn-dark" (click)="acertarPrecosDecimal()">Acertar Preços decimais...</button>
+<br><br>
+<button type="button" class="btn btn-info" (click)="acertarPrecosDecimalNasCompras()">Acertar Preços decimais nas compras...</button>
+
+
+

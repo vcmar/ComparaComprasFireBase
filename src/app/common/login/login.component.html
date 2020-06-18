@@ -1,0 +1,26 @@
+<main role="main" class="container">
+  <div class="starter-template">
+    <h1>Controle de acesso</h1>
+    <p class="lead">
+      Para utilizar o sistema, você precisa se registrar utilizando uma das
+      opções abaixo.
+    </p>
+    <small
+      >* Por favor, verifique se seu navegador aceita janelas popup antes de
+      prosseguir.</small
+    >
+    <div class="formGroup" style="margin: 1rem;">
+      <button
+        type="button"
+        style="margin-right: 1rem;"
+        (click)="socialLogin(1)"
+      ><fa-icon [icon]="faGoogle"></fa-icon>
+        Log in with Google
+      </button>
+      <button type="button" (click)="socialLogin(2)">
+        <fa-icon [icon]="faMicrosoft"></fa-icon>
+        Log in with Microsoft
+      </button>
+    </div>
+  </div>
+</main>

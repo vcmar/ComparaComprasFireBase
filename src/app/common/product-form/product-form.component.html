@@ -1,0 +1,199 @@
+<main role="main" class="container">
+  <div class="row">
+    <div class="col-sm border">
+      <div class="row">
+        <div class="col-12">
+          <form [formGroup]="form">
+            <div class="form-group">
+              <label for="productName">Nome</label>
+              <input
+                formControlName="productName"
+                [ngbTypeahead]="searchProducts"
+                (blur)="CheckProductExists()"
+                (selectItem)="selectedProduct($event)"
+                container="body"
+                type="text"
+                name="productName"
+                id="productName"
+                aria-describedby="productNameHelp"
+                class="form-control form-control-sm"
+              />
+              <small id="productNameHelp" class="form-text text-muted"
+                >Nome do produto.</small
+              >
+              <small
+                *ngIf="productName.touched && productName.invalid"
+                id="productNameHelpErrorRequired"
+                class="alert alert-danger form-text text-muted"
+                >Nome deve ser informado.</small
+              >
+            </div>
+            <div class="form-group">
+              <label for="productCategory">Categoria</label>
+              <input
+                formControlName="productCategory"
+                [ngbTypeahead]="searchCategories"
+                [editable]="false"
+                container="body"
+                type="text"
+                name="productCategory"
+                id="productCategory"
+                aria-describedby="productCategoryHelp"
+                class="form-control form-control-sm"
+              />
+
+              <small id="productCategoryHelp" class="form-text text-muted"
+                >Categoria, seção do produto</small
+              >
+              <small
+                *ngIf="productCategory.touched && productCategory.invalid"
+                id="productCategoryErrorRequired"
+                class="alert alert-danger form-text text-muted"
+                >Categoria deve ser selecionada.</small
+              >
+            </div>
+
+            <!-- MARCAS E FOTOS -->
+            <div class="form-group">
+              <div class="form-row">
+                <div class="form-group col-sm-9 border">
+                  <label for="productBrand">Marcas</label>
+                  <input
+                    formControlName="productBrand"
+                    [ngbTypeahead]="searchBrands"
+                    [editable]="false"
+                    container="body"
+                    type="text"
+                    name="productBrand"
+                    id="productBrand"
+                    aria-describedby="productBrandHelp"
+                    class="form-control form-control-sm"
+                  />
+                  <small id="productBrandHelp" class="form-text text-muted"
+                    >Marca do produto.</small
+                  >
+                  <small
+                    *ngIf="productBrand.touched && productBrand.invalid"
+                    id="productBrandErrorRequired"
+                    class="alert alert-danger form-text text-muted"
+                    >Marca deve ser selecionada.</small
+                  >
+                </div>
+                <div class="form-group col col-sm-3 align-items-center">
+                  <button class="btn btn-sm btn-warning" (click)="showNewBrandModal()">Nova marca...</button>
+                  <small id="productBrandHelp" class="form-text text-muted"
+                    >Caso a marca ainda não tenha sido cadastrada.</small
+                  >
+                </div>
+              </div>
+
+              <div class="form-row">
+                <label for="productImage">Foto</label>
+                <input
+                  formControlName="productImage"
+                  type="text"
+                  id="productImage"
+                  name="productImage"
+                  aria-describedby="productImageHelp"
+                  class="form-control"
+                />
+
+                <small id="productImageHelp" class="form-text text-muted"
+                  >URL para imagem do produto (opcional)</small
+                >
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm border">
+      <div class="row justify-content-center">
+        <app-product-card
+          [name]="productName.value"
+          [brand]="productBrand.value"
+          [category]="productCategory.value"
+          [image]="productImage.value"
+        ></app-product-card>
+      </div>
+      <div class="row justify-content-center">
+        <div class="form-group">
+          <button
+            class="btn btn-primary"
+            (click)="addVersion()"
+            [disabled]="isSaving || isDeleting"
+          >
+            Adicionar versão
+          </button>
+          <button class="btn btn-warning" (click)="clearForm()">
+            Limpar
+          </button>
+        </div>
+      </div>
+      <!-- ACTIONS-->
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm text-center">
+      <h4>Todas as versões do produto {{ productName.value }}</h4>
+
+    </div>
+  </div>
+  <div class="row justify-content-center">
+    <div class="col-sm border" align="center" *ngFor="let item of productVersions; let i = index">
+      <app-product-card
+        [name]="productName.value"
+        [brand]="item.brand"
+        [category]="productCategory.value"
+        [image]="item.image"
+        [isEditable]="isAdminMode"
+        (edit)="editItem(item, i)"
+        (delete)="deleteItem(item, i)"
+      ></app-product-card>
+    </div>
+  </div>
+</main>
+
+<div *ngIf="isEditLoading" class="spinner"></div>
+
+<ng-template #modalDeleteContent let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-title">Confirmar exclusão de Produto</h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close button"
+      aria-describedby="modal-title"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>
+      <strong
+        >Você tem certeza que deseja excluir o produto
+        <span class="text-primary">{{ modalBodyMsg }}</span></strong
+      >
+    </p>
+    <p><span class="text-danger">Esta operação não pode ser desfeita.</span></p>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-outline-secondary"
+      (click)="modal.dismiss('clicou cancelar')"
+    >
+      Cancelar
+    </button>
+    <button
+      type="button"
+      ngbAutofocus
+      class="btn btn-danger"
+      (click)="modal.close('true')"
+    >
+      Ok
+    </button>
+  </div>
+</ng-template>

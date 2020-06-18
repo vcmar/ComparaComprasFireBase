@@ -1,0 +1,20 @@
+<div class="card">
+  <div class="card-header">
+    <div class="row">
+      <div class="col-10 col-sm">
+        <h3>{{name}}</h3>
+        <h5 *ngIf="category" class="font-italic font-weight-light">{{category}}</h5></div>
+      <div class="col-2 col-sm text-right" *ngIf="isEditable">
+        <a (click)="editMe()" class="btn btn-sm"><fa-icon [icon]="faPencilAlt"></fa-icon> </a>
+        <a (click)="removeMe()" class="btn btn-sm btn-error"><fa-icon [icon]="faTrash"></fa-icon></a>
+      </div>
+    </div>
+  </div>
+  <!-- https://www.lojabondinho.com.br/media/catalog/product/cache/1/thumbnail/600x/17f82f742ffe127f42dca9de82fb58b1/2/2/220720110616_maizena200g1.jpg -->
+
+  <img *ngIf="image" [src]="image" class="card-img-top img-thumbnail rounded mx-auto d-block " alt="...">
+  <span *ngIf="!image" class="text-center"><fa-icon [icon]="faCamera"></fa-icon></span>
+  <div class="card-body">
+    <h5 *ngIf="brand" class="card-text">Marca: {{brand}}</h5>
+  </div>
+</div>

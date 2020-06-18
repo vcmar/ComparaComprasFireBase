@@ -1,0 +1,15 @@
+<div class="container-fluid">
+  <div class="row">
+    <h1>Administração de Marcas</h1>
+  </div>
+  <div class="row">
+    <div class="col-sm">
+      <button class="btn btn-secondary btn-sm" (click)="showModal()"> Adicionar Nova... </button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm border text-center" *ngFor="let item of brands$ | async">
+      {{ item }}
+    </div>
+  </div>
+</div>

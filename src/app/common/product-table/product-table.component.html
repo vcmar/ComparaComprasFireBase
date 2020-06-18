@@ -1,0 +1,113 @@
+<div class="mat-elevation-z8">
+  <table mat-table [dataSource]="prodDataSource" matSort class="table table-sm">
+    <ng-container matColumnDef="img">
+      <th mat-header-cell *matHeaderCellDef>Imagem</th>
+      <td mat-cell *matCellDef="let row">
+        <div
+          [style.backgroundImage]="'url(' + row.image + ')'"
+          class="thumbnail"
+        ></div>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-center">
+        Nome
+      </th>
+      <td mat-cell *matCellDef="let row">
+        {{ row.name }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="brand">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-center">
+        Marca
+      </th>
+      <td mat-cell *matCellDef="let row">
+        {{ row.brand }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="category">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-center">
+        Categoria
+      </th>
+      <td mat-cell *matCellDef="let row">
+        {{ row.category }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef>Opções</th>
+      <td mat-cell *matCellDef="let row">
+        <button
+          *ngIf="editEnabled"
+          class="btn btn-warning btn-sm"
+          (click)="editItem(row)"
+        >
+          Editar
+        </button>
+        <button
+          *ngIf="deleteEnabled"
+          class="btn btn-danger btn-sm"
+          (click)="deleteItem(row, modalDeleteContent)"
+          [disabled]="isDeleting"
+        >
+          Excluir
+        </button>
+      </td>
+    </ng-container>
+
+    <tr
+      mat-header-row
+      *matHeaderRowDef="displayedColumns"
+      class="thead-light"
+    ></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+  <mat-paginator [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
+</div>
+
+<ng-template #modalDeleteContent let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-title">Confirmar exclusão de Produto</h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close button"
+      aria-describedby="modal-title"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>
+      <strong
+        >Você tem certeza que deseja excluir o produto
+        <span class="text-primary">{{ modalBodyMsg }}</span></strong
+      >
+    </p>
+    <p>
+      Qualquer compra que tenha utilizado esse produto será afetada.
+      <span class="text-danger">Essa operação não poderá ser desfeita.</span>
+    </p>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-outline-secondary"
+      (click)="modal.dismiss('clicou cancelar')"
+    >
+      Cancelar
+    </button>
+    <button
+      type="button"
+      ngbAutofocus
+      class="btn btn-danger"
+      (click)="modal.close('true')"
+    >
+      Ok
+    </button>
+  </div>
+</ng-template>

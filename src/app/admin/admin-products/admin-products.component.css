@@ -1,0 +1,9 @@
+.thumbnail {
+  width: 3rem;
+  height: 3rem;
+  /* border-radius: 100%; */
+  background-size: cover;
+}
+.btn {
+  margin-left: 0.5rem;
+}

@@ -1,0 +1,13 @@
+table {
+  width: 100%;
+}
+.cell-align-right {
+  text-align: right;
+  justify-content: flex-end;
+}
+
+.align-right{
+  display: flex;
+  padding: 21px 0;
+  justify-content: flex-end;
+}

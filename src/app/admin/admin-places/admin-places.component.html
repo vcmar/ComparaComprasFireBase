@@ -1,0 +1,71 @@
+<main role="main" class="container">
+  <div class="starter-template">
+    <h1>Gerenciamento de Mercados</h1>
+    <p class="lead">
+      Interface administrativa para visualizar mercados criados pelos usuários
+      do sistema que estejam aguardando aprovação.
+    </p>
+
+    <div class="row">
+      <div class="col-8"></div>
+      <div class="col-4 text-right">
+        <a routerLink="/user/places/new" class="btn btn-primary"
+          >Novo Mercado</a
+        >
+      </div>
+    </div>
+
+    <table class="table">
+      <thead class="thead-light">
+        <tr>
+          <th scope="col">Nome</th>
+          <th scope="col">Referencia</th>
+          <th scope="col">Estacionamento?</th>
+          <th scope="col">Mapa</th>
+          <th scope="col">Opção</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngIf="isLoading">
+          <td colspan="5">
+            Aguarde, carregando lista de mercados do sistema...
+          </td>
+        </tr>
+        <tr *ngFor="let item of placeList">
+          <td>{{ item.placeName }}</td>
+          <td>{{ item.placeReference }}</td>
+          <td>{{ item.placeHasParking | boolean: "sim":"não" | titlecase }}</td>
+          <td>
+            <button
+              class="btn btn-info"
+              style="margin: 0.5rem;"
+              (click)="showMap(item)"
+            >
+              Mapa
+            </button>
+          </td>
+          <td class="text-right">
+            <button class="btn btn-primary" (click)="approveItem(item)">
+              Aprovar
+            </button>
+            <button
+              class="btn btn-warning"
+              style="margin: 0.5rem;"
+              (click)="editItem(item)"
+            >
+              Editar
+            </button>
+            <button
+              class="btn btn-danger"
+              (click)="deleteItem(item)"
+              [disabled]="isDeleting"
+            >
+              Excluir
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</main>

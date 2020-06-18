@@ -1,0 +1,10 @@
+.card {
+  width: 18rem;
+}
+.text-center {
+  font-size: 6rem;
+}
+.img-thumbnail {
+  max-width: 15rem;
+  max-height: 15rem;
+}

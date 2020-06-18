@@ -1,0 +1,121 @@
+<main role="main" class="container-fluid">
+  <div class="row">
+    <div class="col-sm">
+      <div class="row">
+        <div class="col-sm text-right">
+          <a class="nav-link" routerLink="/user/places"
+            ><fa-icon [icon]="faBackward"></fa-icon> Voltar
+          </a>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <form [formGroup]="form">
+            <div class="form-group">
+              <label for="name">Nome</label>
+              <input
+                formControlName="placeName"
+                type="text"
+                name="placeName"
+                id="placeName"
+                aria-describedby="placeNameHelp"
+                class="form-control"
+              />
+              <small
+                id="placeNameHelp"
+                class="form-text text-muted"
+                >Nome do mercado ou estabelecimento.</small
+              >
+              <small
+                *ngIf="placeName.touched && placeName.invalid"
+                id="placeNameHelpErrorRequired"
+                class="alert alert-danger form-text text-muted"
+                >Nome deve ser informado.</small
+              >
+            </div>
+            <div class="form-group">
+              <label for="name">Referência</label>
+              <input
+                formControlName="placeReference"
+                type="text"
+                name="placeReference"
+                id="placeReference"
+                aria-describedby="placeReferenceHelp"
+                class="form-control"
+              />
+              <small
+                id="placeReferenceHelp"
+                class="form-text text-muted"
+                >Ponto de referência, ex: Bairro ou Rua.</small
+              >
+              <small
+                *ngIf="placeReference.touched && placeReference.invalid"
+                class="alert alert-danger form-text text-muted"
+                id="placeReferenceHelpErrorRequired"
+                >Ponto de referência deve ser informado.</small
+              >
+              <small
+                *ngIf="
+                  form.errors?.uniquePlaceName && (form.touched || form.dirty)
+                "
+                id="placeNameAndReferenceHelp"
+                class="alert alert-danger form-text text-muted"
+                >Já existe um mercado com esse nome e referencia.</small
+              >
+            </div>
+            <div class="form-group form-check">
+              <input
+                formControlName="placeHasParking"
+                type="checkbox"
+                class="form-check-input"
+                id="placeHasParking"
+                name="placeHasParking"
+
+              />
+              <label class="form-check-label" for="placeHasParking"
+                >Possui estacionamento?</label
+              >
+            </div>
+            <div class="form-group">
+              <label for="name">Endereço (mapa)</label>
+              <input
+                formControlName="placeMap"
+                type="text"
+                name="placeMap"
+                id="placeMap"
+                aria-describedby="placeMapHelp"
+                class="form-control"
+                readonly
+              />
+              <small id="placeMapHelp" class="form-text text-muted"
+                >Opcional, localize o mercado no mapa.</small
+              >
+            </div>
+            <div class="form-group text-right">
+              <button
+                class="btn btn-primary"
+                (click)="savePlace()"
+                [disabled]="isSaving"
+              >
+                Gravar mercado
+              </button>
+              <button class="btn btn-warning" (click)="clearForm()">
+                Limpar
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm border">
+      <div
+        style="height: 450px;"
+        leaflet
+        [leafletOptions]="options"
+        [leafletLayersControl]="layersControl"
+        (leafletClick)="mapClick($event)"
+        (leafletMapReady)="onMapReady($event)"
+      ></div>
+    </div>
+  </div>
+</main>

@@ -1,0 +1,44 @@
+<main role="main" class="container">
+  <div class="starter-template">
+    <h1>Usuários cadastrados</h1>
+    <table class="table table-sm table-striped">
+      <thead class="thead-light">
+        <tr>
+          <th scope="col">Nome</th>
+          <th scope="col">email</th>
+          <th scope="col">Admin?</th>
+          <th scope="col">Aprovado?</th>
+          <th scope="col" colspan="2">Opções</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let item of users$ | async">
+          <td>{{ item.displayName }}</td>
+          <td>{{ item.email }}</td>
+          <td>{{ item.isAdmin | boolean: "sim":"não" | titlecase }}</td>
+          <td>{{ item.isApproved | boolean: "sim":"não" | titlecase }}</td>
+          <td>
+            <ng-template [ngIf]="item.isApproved" [ngIfElse]="notApproved">
+              <button (click)="approveUser(item)" class="btn btn-sm btn-danger">Bloquear</button>
+            </ng-template>
+            <ng-template #notApproved>
+              <button (click)="approveUser(item)" class="btn btn-sm btn-success">Aprovar</button>
+            </ng-template>
+
+
+
+          </td>
+          <td>
+            <ng-template [ngIf]="item.isAdmin" [ngIfElse]="notAdmin">
+              <button (click)="adminUser(item)" class="btn btn-sm btn-warning">Remover Admin</button>
+            </ng-template>
+            <ng-template #notAdmin>
+              <button (click)="adminUser(item)" class="btn btn-sm btn-dark">Tornar Admin</button>
+            </ng-template>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</main>

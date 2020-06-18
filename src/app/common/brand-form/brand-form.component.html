@@ -1,0 +1,34 @@
+<div class="modal-header">
+  <h4 class="modal-title">Adicionar {{title}}</h4>
+  <button class="btn btn-sm close" (click)="activeModal.dismiss('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <main role="main" class="container">
+    <form [formGroup]="frmBrand" class="form">
+      <div class="form-group">
+        <label for="productName">Nome</label>
+        <input
+          formControlName="brandName"
+          container="body"
+          type="text"
+          name="brandName"
+          id="brandName"
+          aria-describedby="brandNameHelp"
+          class="form-control form-control-sm"
+        />
+        <small id="brandNameHelp" class="form-text text-muted"
+          >{{requiredHint}}</small
+        >
+        <small
+          *ngIf="brandName.touched && brandName.invalid"
+          id="brandNameHelpErrorRequired"
+          class="alert alert-danger form-text text-muted"
+          >Campo obrigatório.</small
+        >
+      </div>
+      <button type="button" (click)="saveBrand()" class="btn btn-sm btn-primary">Gravar</button>
+    </form>
+  </main>
+</div>

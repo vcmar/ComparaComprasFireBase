@@ -1,0 +1,172 @@
+<div class="mat-elevation-z8">
+  <div *ngIf="shouldDisplayTitle" class="row">
+    <div class="col-sm">
+      <h4>{{ mainTitle }}</h4>
+    </div>
+  </div>
+  <div *ngIf="shouldDisplaySearch" class="row">
+    <div class="col-sm">
+      <form [formGroup]="form" class="form-inline">
+        <div class="form-group">
+          <label for="purchasePlace"> Produto: </label>
+          <input
+            formControlName="productSearch"
+            [ngbTypeahead]="searchProducts"
+            [editable]="false"
+            container="body"
+            type="text"
+            name="productSearch"
+            id="productSearch"
+            aria-describedby="productSearchHelp"
+            class="form-control form-control-sm"
+          />
+          <button
+            id="btnSearch"
+            name="btnSearch"
+            type="button"
+            class="btn btn-primary btn-sm"
+            [disabled]="isLoading"
+            (click)="searchPrices()"
+          >
+            <fa-icon [icon]="faSearchDollar"></fa-icon>
+            Consultar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="row"></div>
+    <table mat-table [dataSource]="prodDataSource" matSort>
+      <ng-container matColumnDef="name">
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          mat-sort-header
+          class="text-center"
+        >
+          Produto
+        </th>
+        <td mat-cell *matCellDef="let row">
+          {{ row.name }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="brand">
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          mat-sort-header
+          class="text-center"
+        >
+          Marca
+        </th>
+        <td mat-cell *matCellDef="let row">
+          {{ row.brand }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="package">
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          mat-sort-header
+          class="text-center"
+        >
+          Embalagem
+        </th>
+        <td mat-cell *matCellDef="let row">
+          {{ row.package }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="qtd">
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          mat-sort-header
+          class="text-center"
+        >
+          Qtd
+        </th>
+        <td mat-cell *matCellDef="let row">
+          {{ row.qtd }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="date">
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          mat-sort-header
+          class="text-center"
+        >
+          Data
+        </th>
+        <td mat-cell *matCellDef="let row">
+          {{ row.date | date }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="place">
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          mat-sort-header
+          class="text-center"
+        >
+          Local
+        </th>
+        <td mat-cell *matCellDef="let row">
+          {{ row.place }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="uPrice">
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          mat-sort-header
+          class="text-center"
+        >
+          Valor
+        </th>
+        <td mat-cell *matCellDef="let row">
+          <ng-template [ngIf]="!row.uOfferPrice" [ngIfElse]="offerPrice">
+            {{ row.uPrice }}
+          </ng-template>
+          <ng-template #offerPrice>
+            <span placement="top" [ngbTooltip]="tooltipContent">
+              {{ row.uOfferPrice }}
+              <fa-icon [icon]="faExclamation"></fa-icon>
+            </span>
+          </ng-template>
+          <ng-template #tooltipContent>
+            <p>Preço normal: {{ row.uPrice }}</p>
+            <p>Oferta: {{ row.offer }}</p>
+          </ng-template>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="options">
+        <th mat-header-cell *matHeaderCellDef class="text-center">
+          -
+        </th>
+        <td mat-cell *matCellDef="let row">
+          <button class="btn btn-sm btn-danger" (click)="removeMe(row)">
+            <fa-icon [icon]="faTrashAlt"></fa-icon>
+          </button>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="history">
+        <th mat-header-cell *matHeaderCellDef class="align-right">
+          -
+        </th>
+        <td mat-cell *matCellDef="let row" class="text-right cell-align-right">
+          <button class="btn btn-sm btn-danger" (click)="showHistory(row)">
+            <fa-icon [icon]="faSearchDollar"></fa-icon>
+          </button>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+    <mat-paginator [pageSizeOptions]="pageSizeOptions"></mat-paginator>
+
+</div>
+
+<div *ngIf="isLoading" class="spinner"></div>

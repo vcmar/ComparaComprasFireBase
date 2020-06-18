@@ -1,0 +1,16 @@
+<main role="main" class="container">
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container">
+        <h1 class="title">
+          404 - Página não encontrada
+        </h1>
+        <p *ngIf="path">
+          Talvez você queira acessar a página
+          <a [routerLink]="path">"{{ path }}"</a>
+      </p>
+      </div>
+    </div>
+  </section>
+</main>
+

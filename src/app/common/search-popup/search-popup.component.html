@@ -1,0 +1,17 @@
+<div class="modal-header">
+  <h4 class="modal-title">Histórico</h4>
+  <button class="btn btn-sm close" (click)="activeModal.dismiss('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <app-product-search
+  [shouldDisplaySearch]="false"
+  [shouldDisplayTitle]="false"
+  [shouldDisplayPlace]="true"
+  [shouldDisplayDate]="true"
+  [shouldDisplayDelete]="false"
+  [shouldDisplayPriceHistory]="false"
+  [historyProductId]=historyProductId
+></app-product-search>
+</div>
