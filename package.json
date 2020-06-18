@@ -6,7 +6,7 @@
     "start": "ng serve",
     "prebuild": "npm --no-git-tag-version version patch",
     "build": "ng build",
-    "build:prod": "ng build --prod --aot",
+    "build:prod": "npm --no-git-tag-version version patch && ng build --prod --aot",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"

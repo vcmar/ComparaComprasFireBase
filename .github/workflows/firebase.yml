@@ -41,11 +41,11 @@ jobs:
       run: |
           npm i
           npm run build:prod
-    - name: Push Build to Releases
-      uses: ncipollo/release-action@v1
-      with:
-          artifacts: "dist/angular-githubaction/*"
-          token: ${{ secrets.TOKEN }}
+    #- name: Push Build to Releases
+    #  uses: ncipollo/release-action@v1
+    #  with:
+    #      artifacts: "dist/angular-githubaction/*"
+    #      token: ${{ secrets.TOKEN }}
     - name: Archive Production Artifact
       uses: actions/upload-artifact@master
       with:
